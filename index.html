@@ -141,6 +141,122 @@ ga('send', 'pageview');
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-alg-大盗阿福" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/09/alg-大盗阿福/">[alg]大盗阿福</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/09/alg-大盗阿福/" class="archive-article-date">
+  	<time datetime="2017-04-09T15:35:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="final1-大盗阿福"><a href="#final1-大盗阿福" class="headerlink" title="final1: 大盗阿福"></a>final1: 大盗阿福</h1><blockquote>
+<p><strong>描述</strong><br>阿福是一名经验丰富的大盗。趁着月黑风高，阿福打算今晚洗劫一条街上的店铺。<br>这条街上一共有 N 家店铺，每家店中都有一些现金。阿福事先调查得知，只有当他同时洗劫了两家相邻的店铺时，街上的报警系统才会启动，然后警察就会蜂拥而至。<br>作为一向谨慎作案的大盗，阿福不愿意冒着被警察追捕的风险行窃。他想知道，在不惊动警察的情况下，他今晚最多可以得到多少现金？</p>
+<p><strong>输入</strong><br>输入的第一行是一个整数 T (T &lt;= 50) ，表示一共有 T 组数据。<br>接下来的每组数据，第一行是一个整数 N (1 &lt;= N &lt;= 100, 000) ，表示一共有 N 家店铺。第二行是 N 个被空格分开的正整数，表示每一家店铺中的现金数量。每家店铺中的现金数量均不超过 1000 。</p>
+<p><strong>输出</strong><br>对于每组数据，输出一行。该行包含一个整数，表示阿福在不惊动警察的情况下可以得到的现金数量。</p>
+</blockquote>
+<p>样例输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">2</div><div class="line">3</div><div class="line">1 8 2</div><div class="line">4</div><div class="line">10 7 6 14</div></pre></td></tr></table></figure></p>
+<p>样例输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">8</div><div class="line">24</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示<br>对于第一组样例，阿福选择第 2 家店铺行窃，获得的现金数量为 8 。<br>对于第二组样例，阿福选择第 1 和 4 家店铺行窃，获得的现金数量为 10 + 14 = 24。</p>
+</blockquote>
+<hr>
+<h2 id="analyse"><a href="#analyse" class="headerlink" title="analyse"></a>analyse</h2><p>解析第二个样例的过程</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">arr</th>
+<th style="text-align:center">init</th>
+<th style="text-align:center">10</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">14</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">a<sub>1</sub></td>
+<td style="text-align:center">0-</td>
+<td style="text-align:center">0-</td>
+<td style="text-align:center">10-</td>
+<td style="text-align:center">7-</td>
+<td style="text-align:center">16-</td>
+</tr>
+<tr>
+<td style="text-align:center">a<sub>2</sub></td>
+<td style="text-align:center">0-</td>
+<td style="text-align:center">0-</td>
+<td style="text-align:center">0-</td>
+<td style="text-align:center">10-</td>
+<td style="text-align:center">10-</td>
+</tr>
+<tr>
+<td style="text-align:center">a<sub>3</sub></td>
+<td style="text-align:center">0+</td>
+<td style="text-align:center">10+</td>
+<td style="text-align:center">7+</td>
+<td style="text-align:center">16+</td>
+<td style="text-align:center">24+</td>
+</tr>
+</tbody>
+</table>
+<p><code>-</code> 表示到目前为止曾经的值<br><code>+</code> 表示加入当前值能获得的最大值</p>
+<p>整个过程其实就三种值,曾经的最大值,刚刚获得的最大值,这次能获得的最大值?<br>递推式:  </p>
+<p>a<sub>1</sub><sup>‘</sup> = a<sub>3</sub><br>a<sub>2</sub><sup>‘</sup> = max(a<sub>1</sub>, a<sub>2</sub>)<br>a<sub>3</sub><sup>‘</sup> = a<sub>2</sub><sup>‘</sup> + cur</p>
+<hr>
+<h2 id="code"><a href="#code" class="headerlink" title="code"></a>code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// Created by wonderwater on 17-4-8.</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line"><span class="comment">//     freopen("test.in", "r", stdin);</span></div><div class="line"><span class="comment">//     freopen("test.out", "w", stdout);</span></div><div class="line">    <span class="keyword">int</span> st, n, x;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; st;</div><div class="line">    <span class="keyword">int</span> s[<span class="number">2</span>][<span class="number">3</span>];</div><div class="line">    <span class="keyword">int</span> shift = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(st-- &gt; <span class="number">0</span>)&#123;</div><div class="line">        <span class="built_in">memset</span>(s, <span class="number">0</span>, <span class="keyword">sizeof</span>(s));</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; n;</div><div class="line"><span class="comment">//        cout &lt;&lt; "+" &lt;&lt; n &lt;&lt; endl;</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</div><div class="line">            <span class="built_in">cin</span> &gt;&gt; x;</div><div class="line">            s[<span class="number">1</span> - shift][<span class="number">0</span>] = s[shift][<span class="number">2</span>];</div><div class="line">            s[<span class="number">1</span> - shift][<span class="number">1</span>] = max(s[shift][<span class="number">0</span>], s[shift][<span class="number">1</span>]);</div><div class="line">            s[<span class="number">1</span> - shift][<span class="number">2</span>] = max(s[shift][<span class="number">0</span>], s[shift][<span class="number">1</span>]) + x;</div><div class="line">            shift = <span class="number">1</span> - shift;</div><div class="line"><span class="comment">//            cout &lt;&lt; n &lt;&lt; "\t" &lt;&lt; x &lt;&lt; "\t" &lt;&lt; s[shift][0] &lt;&lt; "\t" &lt;&lt; s[shift][1] &lt;&lt; "\t" &lt;&lt; s[shift][2] &lt;&lt; "\t" &lt;&lt; endl;</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) &#123;</div><div class="line">            ret = max(s[shift][i], ret);</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; ret &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">迭代 初级</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/09/alg-大盗阿福/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-你好-世界" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -292,6 +408,10 @@ MathJax.Hub.Queue(function() {
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">迭代 初级</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
