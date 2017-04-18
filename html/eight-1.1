@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #gameImg{
+            display: none;
+        }
+        body{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        table{
+            width: 666px;
+            height: 333px;
+            border-collapse: collapse;
+            border: 0px !important;
+        }
+        table, td, th{
+            border: solid chocolate 5px;
+        }
+        td{
+            padding: 0;
+            background-color: coral;
+            cursor: pointer;
+        }
+        div{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        section{
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <img id="gameImg" src="/images/hexin.jpg" />
+    <table>
+    </table>
+</div>
+
+<script>
+    var rowNum = 5,
+            colNum = 3,
+            tatolNum = rowNum * colNum;
+    (function () {
+        var table = document.getElementsByTagName('table')[0];
+        for(var i = 0; i < rowNum; i++){
+            var tr = document.createElement('tr');
+            for(var j = 0; j < colNum; j++){
+                var td = document.createElement('td');
+                td.appendChild(document.createElement('section'))
+                tr.appendChild(td)
+            }
+            table.appendChild(tr)
+        }
+    })()
+    window.onload = function () {
+        var tds = document.getElementsByTagName('td');
+        var img = (function (fw, fh) {
+            var image = document.getElementById('gameImg')
+            var iw = image.width;
+            var ih = image.height;
+            var lv = colNum * fw / iw;
+            if(iw/ih > (colNum * fw)/(rowNum * fh)){
+                lv = rowNum * fh / ih;
+            }
+            iw *= lv;
+            ih *= lv;
+
+            var spw = (iw - colNum * fw) / 2;
+            var sph = (ih - rowNum * fh) / 2;
+            var cal = function (i, tdts) {
+                ts = tdts.getElementsByTagName('section')[0]
+                if(i >= tatolNum - 1){
+                    ts.style.backgroundImage = '';
+                    return;
+                }
+                var row = Math.floor(i / colNum);
+                var col = Math.floor(i % colNum);
+                var w = spw + col * fw;
+                var h = sph + row * fh;
+
+                ts.style.backgroundImage = 'url(' + image.src + ')';
+                ts.style.backgroundSize = iw + "px, " + ih + "px";
+                ts.style.backgroundPosition = "-" + w + "px " + "-" + h + "px";
+            };
+            return {ih: ih, iw: iw, sph: sph, spw: spw, cal: cal};
+        })(tds[0].offsetWidth, tds[0].offsetHeight);
+        for(var i = 0; i < tds.length; i++) {
+            tds[i].value = i;
+        }
+        var spTr = tatolNum - 1;
+        for(var i = 0; i < tds.length; i++){
+            if(tds[i].value >= tatolNum - 1){
+                spTr = i;
+                break;
+            }
+        }
+
+        for(var i = 0; i < tds.length; i++) {
+            img.cal(tds[i].value, tds[i])
+            tds[i].draggable = true;
+            tds[i].onclick = (function (n) {
+                return function () {
+                    exg(n, tds)
+                }
+            })(i)
+            tds[i].ondragstart = (function (n) {
+                return function (event) {
+                    event.dataTransfer.setData('text/plain', n)
+                }
+            })(i)
+            tds[i].ondrop = (function (n) {
+                return function (event) {
+                    event.preventDefault();
+                    var data = event.dataTransfer.getData("Text");
+                    exg(data, tds)
+                }
+            })(i)
+            tds[i].ondragover = function (event) {
+                event.preventDefault();
+            }
+        }
+
+        function exg(n, tds) {
+            var r = Math.floor(spTr / colNum),
+                    c = Math.floor(spTr % colNum);
+            var tr = Math.floor(n / colNum),
+                    tc = Math.floor(n % colNum);
+            if((Math.abs(tr - r) == 1 && tc == c) ||
+                    (Math.abs(tc - c) == 1 && tr == r)){
+                img.cal(tatolNum - 1, tds[n])
+                img.cal(tds[n].value, tds[spTr])
+                tds[spTr].value = tds[n].value;
+                spTr = n;
+            }
+        }
+    }
+
+
+</script>
+</body>
+</html>
