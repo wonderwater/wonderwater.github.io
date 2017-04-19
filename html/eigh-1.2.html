@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #gameImg{
+            display: none;
+        }
+        body{
+            background-color: aliceblue;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        table{
+            width: 666px;
+            height: 333px;
+            border-collapse: collapse;
+            border: 0px !important;
+        }
+        table, td, th{
+            border: solid chocolate 5px;
+        }
+        td{
+            padding: 0;
+            background-color: coral;
+            cursor: pointer;
+        }
+        div{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        section{
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+        button {
+            cursor: pointer;
+            font-size: 2rem;
+            background-color: mediumseagreen;
+            border-radius: 5px;
+            padding: 2px .5rem;
+            margin: 2rem;
+        }
+        select{
+            cursor: pointer;
+             font-size: 2rem;
+             background-color: mediumseagreen;
+             border-radius: 5px;
+             padding: 2px .5rem;
+             margin: 2rem;
+         }
+    </style>
+</head>
+<body>
+<div>
+    <select id="size">
+        <option value="3">3 * 3</option>
+        <option value="4">4 * 4</option>
+    </select>
+    <button id="solve">直接求解</button>
+    <button id="presolve">预求解</button>
+    <button id="random">随机生成5步</button>
+</div>
+<div>
+    <img id="gameImg" src="hexin.jpg" />
+    <table>
+    </table>
+</div>
+<div style="flex-direction: column">
+    <p>直接求解和预求解均使用朴素的广度搜索,性能相当差</p>
+    <p>预求解将所有解空间一次列出,第二次点击立即获得结果</p>
+</div>
+
+<script>
+    var rowNum = 9,
+            colNum = 9,
+            tatolNum = rowNum * colNum;
+
+    function loadGame() {
+        var table = document.getElementsByTagName('table')[0];
+        Array.from(table.childNodes).forEach(x => x.remove())
+        for(var i = 0; i < rowNum; i++){
+            var tr = document.createElement('tr');
+            for(var j = 0; j < colNum; j++){
+                var td = document.createElement('td');
+                td.appendChild(document.createElement('section'))
+                tr.appendChild(td)
+            }
+            table.appendChild(tr)
+        }
+    }
+
+    function solve(ls, cN, rN) {
+        var spt = ls.indexOf((cN * rN - 1) + '');
+        var pro = {};
+        var tp = ls.join(',');
+        pro[tp] = {last: null, act : -1, spt: spt};
+        var term = [tp]
+        var step = [[-1, 0], [1, 0], [0, 1], [0, -1]];
+        var target = Array.apply(null, {length:cN * rN}).map(Function.call, Number).join(',')
+        while(term.length > 0){
+            var cur = term.shift();
+            console.log(cur)
+            var info = pro[cur];
+            if(cur == target){
+                var ret = [];
+
+                while(info.act >= 0) {
+                    ret.push(info.act)
+                    info = pro[info.last];
+                }
+                return ret.reverse();
+            }
+            var l = cur.split(',');
+            var r = Math.floor(info.spt / cN);
+            var c = Math.floor(info.spt % cN);
+            for(var i = 0; i < step.length; i++){
+                var rr = r + step[i][0];
+                var cc = c + step[i][1];
+                if(rr < 0 || cc < 0 || rr >= rN || cc >= cN)
+                    continue;
+                var nl = Array.prototype.constructor.apply(null, l);
+                var ncur = cN * rr + cc;
+                var tmp = nl[ncur];
+                nl[ncur] = nl[info.spt]
+                nl[info.spt] = tmp;
+                var ncurs = nl.join(',')
+                if(pro[ncurs])
+                    continue;
+                pro[ncurs] = {last: cur, act: ncur, spt: ncur};
+                term.push(ncurs)
+            }
+
+        }
+    }
+    function solveFun(cN, rN) {
+        var begin = new Date()
+        var ta = Array.apply(null, {length:cN * rN}).map(Function.call, Number);
+        var spt = cN * rN - 1;
+        var pro = {};
+        var tp = ta.join(',');
+        pro[tp] = {last: null, act : -1, spt: spt};
+        var term = [tp]
+        var step = [[-1, 0], [1, 0], [0, 1], [0, -1]];
+        var max_stp = 1000000;
+        while(term.length > 0) {
+            if(max_stp-- <= 0) break
+            var cur = term.shift();
+            console.log(cur)
+            var info = pro[cur];
+            var l = cur.split(',');
+            var r = Math.floor(info.spt / cN);
+            var c = Math.floor(info.spt % cN);
+            for (var i = 0; i < step.length; i++) {
+                var rr = r + step[i][0];
+                var cc = c + step[i][1];
+                if (rr < 0 || cc < 0 || rr >= rN || cc >= cN)
+                    continue;
+                var nl = Array.prototype.constructor.apply(null, l);
+                var ncur = cN * rr + cc;
+                var tmp = nl[ncur];
+                nl[ncur] = nl[info.spt]
+                nl[info.spt] = tmp;
+                var ncurs = nl.join(',')
+                if (pro[ncurs])
+                    continue;
+                pro[ncurs] = {last: cur, act: info.spt, spt: ncur};
+                term.push(ncurs)
+            }
+        }
+        console.log('end ' + ((new Date() - begin) /1000))
+        return function (ls) {
+            var ts = ls.join(',')
+            var inf = pro[ts];
+            var ret = [];
+            while(inf.act >= 0){
+                ret.push(inf.act)
+                inf = pro[inf.last];
+            }
+            return ret;
+        }
+    }
+    function randomWalk(n, ls) {
+        var step = [[-1, 0], [0, 1], [0, -1], [1, 0]];
+        var lst = 0,
+                spt = colNum * rowNum - 1;
+        var ta = Array.apply(null, {length:colNum * rowNum}).map(Function.call, Number);
+        if(ls){
+            spt = ls.indexOf('' + spt)
+            ta = ls;
+        }
+
+        var r = Math.floor(spt / colNum);
+        var c = Math.floor(spt % colNum);
+        var record = [];
+        while(n-- > 0){
+            var ra = Math.floor(Math.random() * step.length)
+            for(var ii = 0; ii < step.length; ii++, ra = (ra + 1) % step.length){
+                var i = ra;
+                if(lst + i == 3)
+                    continue;
+                var rr = r + step[i][0];
+                var cc = c + step[i][1];
+                if (rr < 0 || cc < 0 || rr >= rowNum || cc >= colNum)
+                    continue;
+                var ncur = colNum * rr + cc;
+                var tmp = ta[ncur];
+                ta[ncur] = ta[spt]
+                ta[spt] = tmp;
+                spt = ncur;
+                lst = i;
+                r = Math.floor(spt / colNum);
+                c = Math.floor(spt % colNum);
+                record.push(ncur);
+                break;
+            }
+        }
+        return [ta, record];
+    }
+
+    var op = document.querySelector('#size');
+    op.onchange = function () {
+        rowNum = colNum = op.value;
+        tatolNum = rowNum * colNum;
+        loadGame();
+        init()
+    }
+    window.onload = function () {
+        op.onchange()
+    };
+    var cache = {};
+    function init() {
+        var tds = document.getElementsByTagName('td');
+        var img = (function (fw, fh) {
+            var image = document.getElementById('gameImg')
+            var iw = image.width;
+            var ih = image.height;
+            var lv = colNum * fw / iw;
+            if(iw/ih > (colNum * fw)/(rowNum * fh)){
+                lv = rowNum * fh / ih;
+            }
+            iw *= lv;
+            ih *= lv;
+
+            var spw = (iw - colNum * fw) / 2;
+            var sph = (ih - rowNum * fh) / 2;
+            var cal = function (i, tdts) {
+                ts = tdts.getElementsByTagName('section')[0]
+                if(i >= tatolNum - 1){
+                    ts.style.backgroundImage = '';
+                    return;
+                }
+                var row = Math.floor(i / colNum);
+                var col = Math.floor(i % colNum);
+                var w = spw + col * fw;
+                var h = sph + row * fh;
+
+                ts.style.backgroundImage = 'url(' + image.src + ')';
+                ts.style.backgroundSize = iw + "px, " + ih + "px";
+                ts.style.backgroundPosition = "-" + w + "px " + "-" + h + "px";
+            };
+            return {ih: ih, iw: iw, sph: sph, spw: spw, cal: cal};
+        })(tds[0].offsetWidth, tds[0].offsetHeight);
+
+        document.getElementById('solve').onclick = function () {
+            var pz = Array.from(tds).map(x => x.value + '');
+            var ans = solve(pz, colNum, rowNum)
+            show(ans)
+        }
+        document.getElementById('presolve').onclick = function () {
+            var ans = cache[colNum + ',' + rowNum]
+            if(!ans) {
+                ans = solveFun(colNum, rowNum)
+                cache[colNum + ',' + rowNum] = ans;
+            }
+            var pz = Array.from(tds).map(x => x.value + '');
+            show(ans(pz))
+        }
+
+        var puzzle = randomWalk(20)[0]
+        for(var i = 0; i < tds.length; i++) {
+            tds[i].value = puzzle[i];
+        }
+
+        document.querySelector('#random').onclick = function () {
+            var pz = Array.from(tds).map(x => x.value + '');
+            var record = randomWalk(5, pz)[1];
+            show(record)
+        }
+
+        var spTr = tatolNum - 1;
+        for(var i = 0; i < tds.length; i++){
+            if(tds[i].value >= tatolNum - 1){
+                spTr = i;
+                break;
+            }
+        }
+
+        for(var i = 0; i < tds.length; i++) {
+            img.cal(tds[i].value, tds[i])
+            tds[i].draggable = true;
+            tds[i].onclick = (function (n) {
+                return function () {
+                    spTr = exg(spTr, n, tds)
+                }
+            })(i)
+            tds[i].ondragstart = (function (n) {
+                return function (event) {
+                    event.dataTransfer.setData('text/plain', n)
+                }
+            })(i)
+            tds[i].ondrop = (function (n) {
+                return function (event) {
+                    event.preventDefault();
+                    var data = event.dataTransfer.getData("Text");
+                    spTr = exg(spTr, data, tds)
+                }
+            })(i)
+            tds[i].ondragover = function (event) {
+                event.preventDefault();
+            }
+        }
+
+        function show(ls) {
+            if(!ls || ls.length <= 0)
+                return;
+            var t = ls.shift()
+            setTimeout(function () {
+                spTr = exg(spTr, t, tds)
+                show(ls)
+            }, 1000)
+        }
+
+        function exg(spTr, n, tds) {
+            var r = Math.floor(spTr / colNum),
+                    c = Math.floor(spTr % colNum);
+            var tr = Math.floor(n / colNum),
+                    tc = Math.floor(n % colNum);
+            if((Math.abs(tr - r) == 1 && tc == c) ||
+                    (Math.abs(tc - c) == 1 && tr == r)){
+                img.cal(tatolNum - 1, tds[n])
+                img.cal(tds[n].value, tds[spTr])
+                tds[spTr].value = tds[n].value;
+                tds[n].value = tatolNum - 1;
+                spTr = n;
+            }
+            return spTr;
+        }
+    }
+
+
+</script>
+</body>
+</html>
