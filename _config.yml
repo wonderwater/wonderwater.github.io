@@ -4,9 +4,9 @@
 # ---------------------------------------------------------------
 
 # Site
-title: 水的博客
-subtitle:
-description: 无聊小市
+title: water' blog
+subtitle: 记录成长，记录生活
+description: 工作四年，不负初衷
 author: wonderwater
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
 language: zh-Hans
@@ -380,8 +380,8 @@ baidu_analytics: 0dc3ce1ae1e59949d75fed9f0e1436a1
 
 # Disqus
 disqus:
-  enable: false
-  shortname:
+  enable: true
+  shortname: wonderwater
   count: true
   # hide comments (visitors need to click to load the comments)
   # count need to be false when hide is true
