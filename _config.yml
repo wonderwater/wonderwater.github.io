@@ -389,7 +389,7 @@ disqus:
 
 # <wildfire>
 wildfire:
-  enable: false
+  enable: true
   # version - It's recommended to use the following versions.
   loaderVersion: 1.2.5 # https://www.npmjs.com/package/wildfire-comment
   useDev: true
@@ -397,17 +397,17 @@ wildfire:
   # database config
   databaseProvider: firebase # or wilddog
   firebase: # your firebase config goes here ↓
-    apiKey: 
-    authDomain:
-    databaseURL:
-    projectId:
-    storageBucket:
-    messagingSenderId:
+    apiKey: AIzaSyAc10aPMrrfbh8vDA6y0usWMiwHY2BLSJw
+    authDomain: blogcomment-a5d9b.firebaseapp.com
+    databaseURL: https://blogcomment-a5d9b.firebaseio.com
+    projectId: blogcomment-a5d9b
+    storageBucket: blogcomment-a5d9b.appspot.com
+    messagingSenderId: 955073566335
   wilddog: # your wilddog config goes here ↓
     siteId:
   # other configs
   theme: light # or dark
-  locale: en # or other locales, e.g. zh-CN
+  locale: zh-CN # or other locales, e.g. zh-CN
   defaultAvatarURL: 
 # Any question? 
 # Raise an issue here: https://github.com/cheng-kang/wildfire/issues
@@ -435,9 +435,9 @@ changyan:
 
 # Support for gitalk comments system.
 gitalk:
-  enable: true
-  clientID: 7826cb38428b8f8d4e55
-  clientSecret: cf99347aedec66e5be4739eced8bf79ed2652738
+  enable: false
+  clientID: # x
+  clientSecret: # x
   repo: wonderwater.github.io
   owner: wonderwater
   admin: wonderwater
