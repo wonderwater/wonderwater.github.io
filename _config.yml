@@ -438,7 +438,7 @@ gitalk:
   enable: true
   clientID: 7826cb38428b8f8d4e55
   clientSecret: cf99347aedec66e5be4739eced8bf79ed2652738
-  repo: wonderwater.github.io
+  repo: https://github.com/wonderwater/wonderwater.github.io
   owner: wonderwater
   admin: wonderwater
 
