@@ -389,7 +389,7 @@ disqus:
 
 # <wildfire>
 wildfire:
-  enable: true
+  enable: false
   # version - It's recommended to use the following versions.
   loaderVersion: 1.2.5 # https://www.npmjs.com/package/wildfire-comment
   useDev: true
@@ -435,9 +435,9 @@ changyan:
 
 # Support for gitalk comments system.
 gitalk:
-  enable: false
-  clientID: # x
-  clientSecret: # x
+  enable: true
+  clientID: 57d42e2c04bcb1e99af6
+  clientSecret: 51d8e2271a262ff90b246bb2a074c3f9c27514f7
   repo: wonderwater.github.io
   owner: wonderwater
   admin: wonderwater
