@@ -2,6 +2,8 @@
 layout: post
 title: "记tx-lcn分布式事务线上问题"
 date: 2020-07-20 23:00
+categories:
+    - 6.824
 tags:
     - distribution
 ---
